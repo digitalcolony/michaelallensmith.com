@@ -1,3 +1,9 @@
 # MichaelAllenSmith.com
 
-Current version uses design by [HTML5UP](https://html5up.net/).
+Welcome to my portal. I built this site using the Bootstrap 4 framework.
+
+## TODO List
+
+fix VSCode linter for MD files
+
+Add GA to Pressure and Duolingo.

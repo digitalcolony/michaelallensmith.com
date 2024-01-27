@@ -1,0 +1,22 @@
+img {
+	border: 0px;
+	margin: 0px;
+}
+img.chart {
+	width: auto;
+	max-width: 100%;
+	height: auto;
+}
+figcaption {
+	padding: 15px 0px 15px 5px;
+	font-style: italic;
+}
+.frame {
+	border: 2px solid black;
+	background: #f1e6c6;
+
+	padding: 15px 15px;
+}
+body {
+	background: #fdfff5;
+}

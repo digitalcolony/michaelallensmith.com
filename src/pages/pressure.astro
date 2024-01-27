@@ -1,30 +1,15 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="UTF-8" />
-		<title>Under Pressure</title>
-		<meta name="ROBOTS" content="NOINDEX, FOLLOW" />
-		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<style>
-			h3,
-			p {
-				font-family: "Georgia", serif;
-			}
+---
+import Layout from "../layouts/Layout.astro";
+---
 
-			img {
-				width: auto;
-				max-width: 100%;
-				height: auto;
-			}
-		</style>
-	</head>
-
-	<body>
+<Layout title="Under Pressure" url="/" description="Seattle Barometric Pressure (last 4 hours)">
+	<main class="container">
 		<h3>Seattle Barometric Pressure (last 4 hours)</h3>
 		<img
 			src="https://www.atmos.washington.edu/~neallog/Pressure_work/hires_new.cgi"
 			width="640"
 			height="480"
+			class="chart"
 		/>
 
 		<h3>Barometric Pressure (last 7 days)</h3>
@@ -32,6 +17,7 @@
 			src="https://www.atmos.washington.edu/~neallog/Pressure_work/oneweek_oldnew.cgi"
 			width="640"
 			height="480"
+			class="chart"
 		/>
 
 		<h3>60% Running Mean (last 7 days)</h3>
@@ -39,6 +25,7 @@
 			src="https://www.atmos.washington.edu/~neallog/Pressure_work/deriv_old.cgi"
 			width="640"
 			height="240"
+			class="chart"
 		/>
 
 		<p>
@@ -48,5 +35,5 @@
 			>
 			page.
 		</p>
-	</body>
-</html>
+	</main>
+</Layout>

@@ -2,6 +2,10 @@
 
 This is the [Astro](https://astro.build/) rebuild of my personal portal.
 
+## Coming soon
+
+Dark mode.
+
 ## 🧞 Astro Commands
 
 All commands are run from the root of the project, from a terminal:

@@ -7,17 +7,19 @@ const res = await fetch(
 );
 let { data } = await res.json();
 // Sort data by timestamp in descending order
-data = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+data = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 ---
 
 <Layout
-	title="TV and Movie Reviews"
+	title="TV and Movie Reviews 📺"
 	url="/watched/"
 	description="Keeping track of the TV shows and movies I've watched."
 >
 	<main class="container">
-		<h1>TV and Movie Reviews</h1>
-		<p>Keeping track of the TV shows and movies I've watched.</p>
+		<p>
+			Keeping track of the TV shows and movies I've watched. If I quit watching the series or movie
+			the finished column will say No.
+		</p>
 		<table>
 			<thead>
 				<tr>

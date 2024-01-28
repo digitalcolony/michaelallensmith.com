@@ -1,6 +1,8 @@
 ---
 import "../styles/paper.min.css";
 import "../styles/styles.css";
+import Navigation from "../components/Navigation.astro";
+import Footer from "../components/Footer.astro";
 
 interface Props {
 	title: string;
@@ -32,6 +34,9 @@ const siteOGImage = `${canonicalUrl}/images/mas-bike.jpg`;
 		<title>{title}</title>
 	</head>
 	<body>
+		<Navigation url={url} title={title} />
 		<slot />
+
+		<Footer />
 	</body>
 </html>

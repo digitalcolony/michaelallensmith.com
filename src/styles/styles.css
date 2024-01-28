@@ -20,3 +20,29 @@ figcaption {
 body {
 	background: #fdfff5;
 }
+
+header {
+	text-align: center;
+	padding: 15px 0px;
+	margin-bottom: 15px;
+}
+
+.navigation {
+	display: flex;
+	justify-content: center;
+}
+
+.nav-item {
+	list-style-type: none;
+	margin-right: 20px;
+}
+.nav-item:last-child {
+	margin-right: 0;
+}
+
+footer {
+	font-size: 0.8em;
+	text-align: center;
+	padding: 15px 0px;
+	margin-bottom: 15px;
+}

@@ -1,0 +1,42 @@
+---
+export interface Props {
+	url: string;
+	title: string;
+}
+
+const { url, title } = Astro.props;
+let currentPage;
+switch (url) {
+	case "/":
+		currentPage = "home";
+		break;
+	case "/watched/":
+		currentPage = "watched";
+		break;
+	case "/pressure/":
+		currentPage = "pressure";
+		break;
+	default:
+		currentPage = "home";
+		break;
+}
+
+console.log("CP:", currentPage);
+console.log("URL:", url);
+---
+
+<header>
+	<h1>{title}</h1>
+	<div class="navigation">
+		<li class="nav-item">{currentPage === "home" ? <span>Home</span> : <a href="/">Home</a>}</li>
+		<li class="nav-item">
+			{
+				currentPage === "watched" ? (
+					<span>TV and Movies</span>
+				) : (
+					<a href="/watched/">TV and Movies</a>
+				)
+			}
+		</li>
+	</div>
+</header>

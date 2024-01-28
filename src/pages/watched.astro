@@ -1,0 +1,51 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// fetch data from google sheet
+const res = await fetch(
+	"https://script.google.com/macros/s/AKfycbweZeceqReDwdB3llC2izp4NTCoBDzDdUO7RDba4bkcHGlHaPPB8JarQtY1VlPzbYpZ/exec"
+);
+let { data } = await res.json();
+// Sort data by timestamp in descending order
+data = data.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+---
+
+<Layout
+	title="TV and Movie Reviews"
+	url="/watched/"
+	description="Keeping track of the TV shows and movies I've watched."
+>
+	<main class="container">
+		<h1>TV and Movie Reviews</h1>
+		<p>Keeping track of the TV shows and movies I've watched.</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Rating</th>
+					<th>Type</th>
+					<th>Finished</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				{
+					data.map((item) => (
+						<tr>
+							<td>{item.show_name}</td>
+							<td>{item.review}</td>
+							<td>{item.show_type}</td>
+							<td>{item.finished}</td>
+							<td>
+								{new Date(item.timestamp).toLocaleDateString("en-US", {
+									month: "long",
+									year: "numeric",
+								})}
+							</td>
+						</tr>
+					))
+				}
+			</tbody>
+		</table>
+	</main>
+</Layout>

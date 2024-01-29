@@ -27,7 +27,6 @@ data = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestam
 					<th>Rating</th>
 					<th>Type</th>
 					<th>Finished</th>
-					<th>Date</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -38,12 +37,6 @@ data = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestam
 							<td>{item.review}</td>
 							<td>{item.show_type}</td>
 							<td>{item.finished}</td>
-							<td>
-								{new Date(item.timestamp).toLocaleDateString("en-US", {
-									month: "long",
-									year: "numeric",
-								})}
-							</td>
 						</tr>
 					))
 				}

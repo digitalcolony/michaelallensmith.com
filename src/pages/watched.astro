@@ -8,6 +8,9 @@ const res = await fetch(
 let { data } = await res.json();
 // Sort data by timestamp in descending order
 data = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+// filter out data where finished is not yes
+data = data.filter((item) => item.finished === "Yes");
 ---
 
 <Layout
@@ -16,27 +19,23 @@ data = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestam
 	description="Keeping track of the TV shows and movies I've watched."
 >
 	<main class="container">
-		<p>
-			Keeping track of the TV shows and movies I've watched. If I quit watching the series or movie
-			the finished column will say No.
-		</p>
+		<p>Keeping track of the TV shows 📺 and movies 🎦 I've watched.</p>
 		<table>
 			<thead>
 				<tr>
+					<th>Type</th>
 					<th>Name</th>
 					<th>Rating</th>
-					<th>Type</th>
-					<th>Finished</th>
 				</tr>
 			</thead>
+
 			<tbody>
 				{
 					data.map((item) => (
 						<tr>
+							<td>{item.show_type === "Movie" ? "🎦" : "📺"}</td>
 							<td>{item.show_name}</td>
 							<td>{item.review}</td>
-							<td>{item.show_type}</td>
-							<td>{item.finished}</td>
 						</tr>
 					))
 				}

@@ -1,0 +1,50 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// fetch data from google sheet
+const res = await fetch(
+	"https://script.google.com/macros/s/AKfycbxSRX6FR2A44yUPKY2QbVXp1BsxlPKgPIL1sq96OOYDLxXwkA-pd2wu5yID8ZG3Sjuu/exec"
+);
+let { data } = await res.json();
+// Sort data by timestamp in descending order
+data = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+---
+
+<Layout
+	title="My Espresso Log ☕"
+	url="/espresso/"
+	description="Keeping track of the espressos I've had."
+>
+	<main class="container">
+		<p>☕ 5: Memorable and outstanding, 4: Excellent, 3: Good, 2: Blah, 1: Undrinkable</p>
+		<table>
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Place</th>
+					<th>Espresso</th>
+					<th>Rating</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				{
+					data.map((item) => (
+						<tr>
+							<td>
+								{new Date(item.timestamp).toLocaleDateString("en-US", {
+									month: "short",
+									day: "numeric",
+									year: "numeric",
+								})}
+							</td>
+							<td>{item.where}</td>
+							<td>{item.espresso}</td>
+							<td>{item.rating}</td>
+						</tr>
+					))
+				}
+			</tbody>
+		</table>
+	</main>
+</Layout>

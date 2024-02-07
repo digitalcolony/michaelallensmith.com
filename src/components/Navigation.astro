@@ -13,16 +13,13 @@ switch (url) {
 	case "/watched/":
 		currentPage = "watched";
 		break;
-	case "/pressure/":
-		currentPage = "pressure";
+	case "/espresso/":
+		currentPage = "espresso";
 		break;
 	default:
 		currentPage = "home";
 		break;
 }
-
-console.log("CP:", currentPage);
-console.log("URL:", url);
 ---
 
 <header>
@@ -35,6 +32,15 @@ console.log("URL:", url);
 					<span>TV and Movies</span>
 				) : (
 					<a href="/watched/">TV and Movies</a>
+				)
+			}
+		</li>
+		<li class="nav-item">
+			{
+				currentPage === "espresso" ? (
+					<span>Espresso Log</span>
+				) : (
+					<a href="/espresso/">Espresso Log</a>
 				)
 			}
 		</li>

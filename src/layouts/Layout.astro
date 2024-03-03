@@ -8,11 +8,15 @@ interface Props {
 	title: string;
 	description: string;
 	url: string;
+	robots?: string;
 }
 
-const { title, description, url } = Astro.props;
+const { title, description, url, robots } = Astro.props;
 const canonicalUrl = `https://michaelallensmith.com${url}`;
 const siteOGImage = `${canonicalUrl}/images/mas-bike.jpg`;
+
+const defaultRobots = "index, follow";
+const robotsMeta = robots ? robots : defaultRobots;
 ---
 
 <!doctype html>
@@ -21,7 +25,7 @@ const siteOGImage = `${canonicalUrl}/images/mas-bike.jpg`;
 		<meta charset="UTF-8" />
 		<meta name="description" content="Astro description" />
 		<meta name="viewport" content="width=device-width" />
-		<meta name="robots" content="index, follow" />
+		<meta name="robots" content={robotsMeta} />
 		<link rel="canonical" href={canonicalUrl} />
 		<meta property="og:title" content={description} />
 		<meta property="og:type" content="website" />

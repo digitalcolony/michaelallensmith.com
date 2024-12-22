@@ -1,42 +1,11 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getCollection } from "astro:content";
 
-let data;
-let error;
-
-async function fetchData() {
-	try {
-		const response = await fetch(
-			"https://script.google.com/macros/s/AKfycbweZeceqReDwdB3llC2izp4NTCoBDzDdUO7RDba4bkcHGlHaPPB8JarQtY1VlPzbYpZ/exec"
-		);
-
-		if (!response.ok) {
-			throw new Error(`HTTP error! status: ${response.status}`);
-		}
-
-		const result = await response.json();
-
-		// Validate the data
-		if (!Array.isArray(result.data)) {
-			throw new Error("Invalid data format");
-		}
-
-		// Sort data by timestamp in descending order
-		data = result.data.sort(
-			(a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-		);
-
-		// Sort data by timestamp in descending order
-		data = data.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
-
-		// filter out data where finished is not yes
-		data = data.filter((item) => item.finished === "Yes");
-	} catch (err) {
-		error = `We're sorry, but we couldn't load the data. Please try again later. Error: ${err.message}`;
-	}
-}
-
-await fetchData();
+const reviews = await getCollection("reviews");
+const reviewData = reviews.map((review) => review.data);
+// sort by date descending
+reviewData.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 ---
 
 <Layout
@@ -47,34 +16,38 @@ await fetchData();
 	<main class="container">
 		<p>Keeping track of the TV shows 📺 and movies 🎦 I've watched.</p>
 
-		{error && <p>{error}</p>}
+		<table>
+			<thead>
+				<tr>
+					<th>Type</th>
+					<th>Name</th>
+					<th>Rating</th>
+					<th>Watched</th>
+				</tr>
+			</thead>
 
-		{!error && data.length === 0 && <p>No data available.</p>}
-
-		{
-			!error && data.length > 0 && (
-				<table>
-					<thead>
+			<tbody>
+				{
+					reviewData.map((review) => (
 						<tr>
-							<th>Type</th>
-							<th>Name</th>
-							<th>Rating</th>
-							<th>Watched</th>
+							<td>{review.showType === "Movie" ? "🎦" : "📺"}</td>
+							<td>{review.showName}</td>
+							<td>{review.rating}</td>
+							<td>{new Date(review.timestamp).getFullYear()}</td>
 						</tr>
-					</thead>
-
-					<tbody>
-						{data.map((item) => (
-							<tr>
-								<td>{item.show_type === "Movie" ? "🎦" : "📺"}</td>
-								<td>{item.show_name}</td>
-								<td>{item.review}</td>
-								<td>{new Date(item.timestamp).getFullYear()}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			)
-		}
+					))
+				}
+			</tbody>
+		</table>
+		) }
 	</main>
 </Layout>
+
+<style>
+	table thead th {
+		position: sticky;
+		top: 0;
+		background-color: #fdfff5;
+		z-index: 1;
+	}
+</style>

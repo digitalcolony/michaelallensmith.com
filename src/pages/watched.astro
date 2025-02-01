@@ -28,18 +28,19 @@ reviewData.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp
 
 			<tbody>
 				{
-					reviewData.map((review) => (
-						<tr>
-							<td>{review.showType === "Movie" ? "🎦" : "📺"}</td>
-							<td>{review.showName}</td>
-							<td>{review.rating}</td>
-							<td>{new Date(review.timestamp).getFullYear()}</td>
-						</tr>
-					))
+					reviewData
+						.filter((review) => review.finished == "Yes")
+						.map((review) => (
+							<tr>
+								<td>{review.showType === "Movie" ? "🎦" : "📺"}</td>
+								<td>{review.showName}</td>
+								<td>{review.rating}</td>
+								<td>{new Date(review.timestamp).getFullYear()}</td>
+							</tr>
+						))
 				}
 			</tbody>
 		</table>
-		) }
 	</main>
 </Layout>
 

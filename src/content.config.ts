@@ -27,7 +27,6 @@ const reviews = defineCollection({
 			}
 			const { data } = await response.json();
 			console.log(`Fetched ${data.length} reviews`);
-			console.log(data);
 			return data.map((review: ReviewData, index: number) => ({
 				id: index.toString(),
 				timestamp: new Date(review.timestamp).toLocaleDateString(), // Convert timestamp to short date
@@ -53,4 +52,4 @@ const reviews = defineCollection({
 	}),
 });
 
-export const collections = { reviews };
+export const collections = { reviews: reviews };

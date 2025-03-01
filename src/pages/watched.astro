@@ -6,6 +6,11 @@ const reviews = await getCollection("reviews");
 const reviewData = reviews.map((review) => review.data);
 // sort by date descending
 reviewData.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+
+// Count movies and TV shows
+const finishedReviews = reviewData.filter((review) => review.finished == "Yes");
+const movieCount = finishedReviews.filter((review) => review.showType === "Movie").length;
+const tvShowCount = finishedReviews.filter((review) => review.showType !== "Movie").length;
 ---
 
 <Layout
@@ -14,41 +19,163 @@ reviewData.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp
 	description="Keeping track of the TV shows and movies I've watched."
 >
 	<main class="container">
-		<p>Keeping track of the TV shows 📺 and movies 🎦 I've watched.</p>
+		<p>Keeping track of the TV shows 📺 and movies 🎦 I've watched since 2021.</p>
 
-		<table>
-			<thead>
-				<tr>
-					<th>Type</th>
-					<th>Name</th>
-					<th>Rating</th>
-					<th>Watched</th>
-				</tr>
-			</thead>
+		<!-- Search and counts container -->
+		<div class="search-container">
+			<form id="searchForm" onsubmit="return false;" class="search-form">
+				<input type="text" id="searchInput" placeholder="Search..." />
+			</form>
+			<div class="count-label">
+				<span>🎦 Movies: {movieCount}</span>
+				<span>📺 TV Shows: {tvShowCount}</span>
+			</div>
+		</div>
 
-			<tbody>
-				{
-					reviewData
-						.filter((review) => review.finished == "Yes")
-						.map((review) => (
-							<tr>
-								<td>{review.showType === "Movie" ? "🎦" : "📺"}</td>
-								<td>{review.showName}</td>
-								<td>{review.rating}</td>
-								<td>{new Date(review.timestamp).getFullYear()}</td>
-							</tr>
-						))
-				}
-			</tbody>
-		</table>
+		<!-- Scrollable table container -->
+		<div class="table-container">
+			<table>
+				<thead>
+					<tr>
+						<th>Type</th>
+						<th>Name</th>
+						<th>Rating</th>
+						<th class="hide-on-mobile">Watched</th>
+					</tr>
+				</thead>
+
+				<tbody id="reviewTableBody">
+					{
+						reviewData
+							.filter((review) => review.finished == "Yes")
+							.map((review) => (
+								<tr>
+									<td>{review.showType === "Movie" ? "🎦" : "📺"}</td>
+									<td>{review.showName}</td>
+									<td>{review.rating}</td>
+									<td class="hide-on-mobile">{new Date(review.timestamp).getFullYear()}</td>
+								</tr>
+							))
+					}
+				</tbody>
+			</table>
+		</div>
 	</main>
 </Layout>
 
 <style>
+	/* Scrollable table container */
+	.table-container {
+		max-height: 500px;
+		overflow-y: auto;
+	}
+
+	/* Scrollbar styling */
+	.table-container::-webkit-scrollbar {
+		width: 12px; /* Adjust the width as needed */
+	}
+
+	.table-container::-webkit-scrollbar-track {
+		background: #f1f1f1; /* Color of the tracking area */
+	}
+
+	.table-container::-webkit-scrollbar-thumb {
+		background: #888; /* Color of the thumb */
+	}
+
+	.table-container::-webkit-scrollbar-thumb:hover {
+		background: #555; /* Color of the thumb on hover */
+	}
+
 	table thead th {
 		position: sticky;
 		top: 0;
 		background-color: #fdfff5;
 		z-index: 1;
 	}
+
+	/* Search and counts styling */
+	.search-container {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 1rem;
+	}
+
+	.search-form {
+		flex: 1;
+		max-width: 300px;
+	}
+
+	.count-label {
+		display: flex;
+		gap: 1rem;
+		margin-right: 1rem; /* Add margin to the right */
+		flex-direction: row; /* Default to row */
+	}
+
+	.count-label span {
+		white-space: nowrap;
+	}
+
+	/* Media query for mobile devices */
+	@media (max-width: 600px) {
+		.search-container {
+			flex-direction: column; /* Stack the form and counts */
+			align-items: flex-start; /* Align items to the start */
+		}
+
+		.count-label {
+			flex-direction: row; /* Display counts in a row */
+			margin-right: 0; /* Remove right margin */
+			margin-top: 0.5rem; /* Add some space between search and counts */
+		}
+
+		.hide-on-mobile {
+			display: none; /* Hide on mobile */
+		}
+	}
 </style>
+
+<script is:inline>
+	document.addEventListener("DOMContentLoaded", function () {
+		const searchInput = document.getElementById("searchInput");
+		const searchForm = document.getElementById("searchForm");
+
+		if (searchInput) {
+			searchInput.addEventListener("keyup", filterTable);
+			searchInput.addEventListener("input", filterTable);
+		}
+
+		if (searchForm) {
+			searchForm.addEventListener("submit", function (e) {
+				e.preventDefault();
+				filterTable();
+			});
+		}
+
+		function filterTable() {
+			const input = document.getElementById("searchInput");
+			if (!input) return;
+			const filter = input.value.toLowerCase();
+			const tableBody = document.getElementById("reviewTableBody");
+			if (!tableBody) return;
+
+			const rows = tableBody.getElementsByTagName("tr");
+
+			for (let i = 0; i < rows.length; i++) {
+				const cells = rows[i].getElementsByTagName("td");
+				let match = false;
+
+				for (let j = 0; j < cells.length; j++) {
+					if (cells[j].textContent.toLowerCase().includes(filter)) {
+						match = true;
+						break;
+					}
+				}
+
+				rows[i].style.display = match ? "" : "none";
+			}
+		}
+	});
+</script>

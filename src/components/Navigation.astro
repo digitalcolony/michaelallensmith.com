@@ -13,9 +13,6 @@ switch (url) {
 	case "/watched/":
 		currentPage = "watched";
 		break;
-	case "/espresso/":
-		currentPage = "espresso";
-		break;
 	default:
 		currentPage = "home";
 		break;
@@ -23,7 +20,7 @@ switch (url) {
 ---
 
 <header>
-	<h1>{title}</h1>
+	<h2>{title}</h2>
 	<div class="navigation">
 		<li class="nav-item">{currentPage === "home" ? <span>Home</span> : <a href="/">Home</a>}</li>
 		<li class="nav-item">

@@ -1,0 +1,44 @@
+---
+import Layout from "../layouts/Layout.astro";
+import BalancedBowl from "../components/BalancedBowl.astro";
+---
+
+<Layout title="Diet and Nutrition 🥗" url="/diet/" description="My approach to diet and nutrition">
+	<main class="container">
+		<p>
+			My approach to nutrition centers around whole foods, diverse nutrients, and supporting gut
+			health. The balanced bowl concept below represents the foundation of how I think about daily
+			nutrition.
+		</p>
+
+		<BalancedBowl />
+
+		<section class="diet-philosophy">
+			<h2>My Diet Philosophy</h2>
+			<p>
+				This approach emphasizes nutrient density, variety, and foods that support optimal health.
+				The percentages serve as general guidelines rather than strict rules, with the focus on
+				including foods from each category daily.
+			</p>
+		</section>
+	</main>
+</Layout>
+
+<style>
+	.diet-philosophy {
+		margin-top: 2rem;
+		padding: 1.5rem;
+		background: #f8f9fa;
+		border-radius: 8px;
+	}
+
+	.diet-philosophy h2 {
+		color: #333;
+		margin-bottom: 1rem;
+	}
+
+	.diet-philosophy p {
+		line-height: 1.6;
+		color: #666;
+	}
+</style>

@@ -38,9 +38,11 @@ const tvShowCount = finishedReviews.filter((review) => review.showType !== "Movi
 				<thead>
 					<tr>
 						<th>Type</th>
-						<th>Name</th>
-						<th>Rating</th>
-						<th class="hide-on-mobile">Watched</th>
+						<th class="sortable" data-sort="name">Name <span class="sort-arrow"></span></th>
+						<th class="sortable" data-sort="rating">Rating <span class="sort-arrow"></span></th>
+						<th class="sortable hide-on-mobile" data-sort="watched"
+							>Watched <span class="sort-arrow"></span></th
+						>
 					</tr>
 				</thead>
 
@@ -94,6 +96,28 @@ const tvShowCount = finishedReviews.filter((review) => review.showType !== "Movi
 		z-index: 1;
 	}
 
+	/* Sortable column styling */
+	.sortable {
+		cursor: pointer;
+		user-select: none;
+		position: relative;
+	}
+
+	.sortable:hover {
+		background-color: #f0f0f0;
+	}
+
+	.sort-arrow {
+		margin-left: 5px;
+		font-size: 0.8em;
+		opacity: 0.3;
+		transition: opacity 0.2s;
+	}
+
+	.sort-arrow.sort-active {
+		opacity: 1;
+	}
+
 	/* Search and counts styling */
 	.search-container {
 		display: flex;
@@ -141,7 +165,26 @@ const tvShowCount = finishedReviews.filter((review) => review.showType !== "Movi
 	document.addEventListener("DOMContentLoaded", function () {
 		const searchInput = document.getElementById("searchInput");
 		const searchForm = document.getElementById("searchForm");
+		let currentSort = { column: "watched", direction: "desc" };
+		let allReviewData = [];
 
+		// Store the original data for sorting
+		const tableBody = document.getElementById("reviewTableBody");
+		if (tableBody) {
+			const rows = Array.from(tableBody.getElementsByTagName("tr"));
+			allReviewData = rows.map((row) => {
+				const cells = row.getElementsByTagName("td");
+				return {
+					element: row,
+					type: cells[0].textContent.trim(),
+					name: cells[1].textContent.trim(),
+					rating: cells[2].textContent.trim(),
+					watched: cells.length > 3 ? cells[3].textContent.trim() : "",
+				};
+			});
+		}
+
+		// Search functionality
 		if (searchInput) {
 			searchInput.addEventListener("keyup", filterTable);
 			searchInput.addEventListener("input", filterTable);
@@ -152,6 +195,97 @@ const tvShowCount = finishedReviews.filter((review) => review.showType !== "Movi
 				e.preventDefault();
 				filterTable();
 			});
+		}
+
+		// Sorting functionality
+		const sortableHeaders = document.querySelectorAll(".sortable");
+		sortableHeaders.forEach((header) => {
+			header.addEventListener("click", function () {
+				const sortType = this.getAttribute("data-sort");
+				sortTable(sortType);
+			});
+		});
+
+		// Initialize the default sort arrow for "watched" column
+		updateSortArrows("watched", "desc");
+
+		function sortTable(column) {
+			// Determine sort direction
+			let direction = "asc";
+			if (currentSort.column === column) {
+				direction = currentSort.direction === "asc" ? "desc" : "asc";
+			} else {
+				// Default directions for each column
+				if (column === "rating") {
+					direction = "desc"; // 5 to 1 star default
+				} else if (column === "watched") {
+					direction = "desc"; // newest first default
+				} else {
+					direction = "asc"; // name ascending default
+				}
+			}
+
+			currentSort = { column, direction };
+
+			// Update arrow indicators
+			updateSortArrows(column, direction);
+
+			// Sort the data
+			const sortedData = [...allReviewData].sort((a, b) => {
+				let aVal, bVal;
+
+				switch (column) {
+					case "name":
+						aVal = a.name.toLowerCase();
+						bVal = b.name.toLowerCase();
+						break;
+					case "rating":
+						// Sort by rating length (5 stars > 4 stars > etc.) then by content
+						aVal = a.rating.length * 1000 + a.rating.charCodeAt(0);
+						bVal = b.rating.length * 1000 + b.rating.charCodeAt(0);
+						break;
+					case "watched":
+						aVal = parseInt(a.watched) || 0;
+						bVal = parseInt(b.watched) || 0;
+						break;
+					default:
+						return 0;
+				}
+
+				if (direction === "asc") {
+					return aVal > bVal ? 1 : aVal < bVal ? -1 : 0;
+				} else {
+					return aVal < bVal ? 1 : aVal > bVal ? -1 : 0;
+				}
+			});
+
+			// Clear and rebuild table body
+			const tbody = document.getElementById("reviewTableBody");
+			tbody.innerHTML = "";
+			sortedData.forEach((item) => {
+				tbody.appendChild(item.element);
+			});
+
+			// Reapply current filter if any
+			if (searchInput && searchInput.value.trim() !== "") {
+				filterTable();
+			}
+		}
+
+		function updateSortArrows(activeColumn, direction) {
+			// Reset all arrows
+			const arrows = document.querySelectorAll(".sort-arrow");
+			arrows.forEach((arrow) => {
+				arrow.className = "sort-arrow";
+				arrow.textContent = "";
+			});
+
+			// Set active arrow
+			const activeHeader = document.querySelector(`[data-sort="${activeColumn}"] .sort-arrow`);
+			if (activeHeader) {
+				activeHeader.className = `sort-arrow sort-active sort-${direction}`;
+				activeHeader.textContent = direction === "asc" ? "▲" : "▼";
+			}
 		}
 
 		function filterTable() {

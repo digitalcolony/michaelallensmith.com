@@ -5,7 +5,8 @@ A personal website built with [Astro](https://astro.build/) that serves as my di
 ## 🚀 Features
 
 - **Personal Portfolio**: Introduction page with biographical information, education, military service, and career highlights
-- **Media Tracker**: TV show and movie review system with search functionality
+- **Media Tracker**: TV show and movie review system with search functionality and sortable columns
+- **Diet & Nutrition Guide**: Balanced Bowl nutrition chart with comprehensive food categories and health benefits
 - **Responsive Design**: Clean, modern interface using the Paper CSS framework
 - **Optimized Images**: Astro's built-in image optimization with modern formats (AVIF, WebP)
 - **SEO Friendly**: Proper meta tags and structured data for better search engine visibility
@@ -27,6 +28,7 @@ A personal website built with [Astro](https://astro.build/) that serves as my di
 ├── src/
 │   ├── assets/             # Optimized images
 │   ├── components/         # Reusable Astro components
+│   │   ├── BalancedBowl.astro
 │   │   ├── Card.astro
 │   │   ├── Footer.astro
 │   │   └── Navigation.astro
@@ -34,6 +36,7 @@ A personal website built with [Astro](https://astro.build/) that serves as my di
 │   │   └── Layout.astro
 │   ├── pages/              # Route pages
 │   │   ├── index.astro     # Personal introduction
+│   │   ├── diet.astro      # Diet and nutrition guide
 │   │   └── watched.astro   # TV/Movie tracker
 │   └── styles/             # CSS files
 ├── astro.config.mjs        # Astro configuration
@@ -91,7 +94,8 @@ This site is automatically deployed to Netlify when changes are pushed to the ma
 ## 🎯 Key Pages
 
 - **Home (/)**: Personal introduction with biographical information, education, military service, and contact details
-- **Watched (/watched/)**: TV show and movie review tracker with search functionality and viewing statistics
+- **Diet (/diet/)**: Comprehensive nutrition guide featuring the balanced bowl approach with food categories, percentages, and health benefits
+- **Watched (/watched/)**: TV show and movie review tracker with search functionality, sortable columns, and viewing statistics
 
 ## 🤝 Contributing
 

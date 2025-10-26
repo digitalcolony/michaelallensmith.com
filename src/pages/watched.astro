@@ -25,6 +25,9 @@ const tvShowCount = finishedReviews.filter((review) => review.showType !== "Movi
 		<div class="search-container">
 			<form id="searchForm" onsubmit="return false;" class="search-form">
 				<input type="text" id="searchInput" placeholder="Search..." />
+				<span id="noResultsMessage" class="no-results-message" style="display: none;"
+					>No results</span
+				>
 			</form>
 			<div class="count-label">
 				<span>🎦 Movies: {movieCount}</span>
@@ -129,6 +132,17 @@ const tvShowCount = finishedReviews.filter((review) => review.showType !== "Movi
 	.search-form {
 		flex: 1;
 		max-width: 300px;
+		position: relative;
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+	}
+
+	.no-results-message {
+		color: #888;
+		font-size: 0.9em;
+		font-style: italic;
+		white-space: nowrap;
 	}
 
 	.count-label {
@@ -296,6 +310,7 @@ const tvShowCount = finishedReviews.filter((review) => review.showType !== "Movi
 			if (!tableBody) return;
 
 			const rows = tableBody.getElementsByTagName("tr");
+			let visibleCount = 0;
 
 			for (let i = 0; i < rows.length; i++) {
 				const cells = rows[i].getElementsByTagName("td");
@@ -309,6 +324,21 @@ const tvShowCount = finishedReviews.filter((review) => review.showType !== "Movi
 				}
 
 				rows[i].style.display = match ? "" : "none";
+				if (match) {
+					visibleCount++;
+				}
+			}
+
+			// Show/hide "No results" message
+			const noResultsMessage = document.getElementById("noResultsMessage");
+			const hasSearchTerm = filter.trim() !== "";
+
+			if (noResultsMessage) {
+				if (hasSearchTerm && visibleCount === 0) {
+					noResultsMessage.style.display = "inline";
+				} else {
+					noResultsMessage.style.display = "none";
+				}
 			}
 		}
 	});

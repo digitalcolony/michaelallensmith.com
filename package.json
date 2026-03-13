@@ -14,8 +14,8 @@
     "netlify:dev": "netlify dev"
   },
   "dependencies": {
-    "@astrojs/netlify": "^6.6.3",
-    "astro": "^5.16.3"
+    "@astrojs/netlify": "^7.0.2",
+    "astro": "^6.0.4"
   },
   "devDependencies": {
     "netlify-cli": "^17.36.4"
